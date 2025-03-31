@@ -1,0 +1,16 @@
+---
+description: 
+globs: **/*.ts, **/*.tsx
+alwaysApply: false
+---
+---
+name: shadcn-ui-best-practices.mdc
+description: Guidelines for using shadcn/ui components
+globs: **/*.{ts,tsx}
+---
+
+- Follow **consistent naming conventions** for components.
+- Use **props and slots** to enhance flexibility.
+- Implement **proper accessibility (ARIA attributes, focus states)**.
+- Leverage **shadcn/ui’s theming system** for a cohesive design.
+- Keep dependencies up to date and avoid unnecessary overrides.

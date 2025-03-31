@@ -1,0 +1,25 @@
+---
+description: 
+globs: **/*.ts, **/*.tsx
+alwaysApply: false
+---
+---
+name: nextjs-best-practices.mdc
+description: Best practices for Next.js applications and routing
+globs: **/*.{ts,tsx}
+---
+
+- Always use Next.js 14+ and its latest stable features.
+- Use the App Router for better performance and simpler routing.
+- Prefer **React Server Components (RSC)** and **Server Actions** where possible.
+- Minimize the use of `"use client"` to only small, isolated components.
+- Use **React Suspense and streaming** for improved loading states.
+- Implement **error boundaries** to gracefully handle runtime errors.
+- Optimize images using the **Next.js `<Image />` component**.
+- Implement **incremental static regeneration (ISR)** where needed.
+- Use **middleware** for authentication and route protection.
+- Leverage **Next.js built-in SEO** features like metadata, sitemaps, and OG tags.
+- Implement structured data using **JSON-LD** for SEO optimization.
+- Always add **loading and error states** to async components.
+- Use **dynamic imports** (`next/dynamic`) to optimize performance.
+- Keep components **modular and reusable** for maintainability.

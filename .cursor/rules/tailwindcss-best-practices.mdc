@@ -1,0 +1,20 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+name: tailwindcss-best-practices.mdc
+description: Best practices for using Tailwind CSS
+globs: **/*.{ts,tsx,css}
+---
+
+- Always use **utility-first CSS** for consistent, maintainable styles.
+- Create reusable **custom components** using `@apply`.
+- Optimize for **mobile-first design** using responsive utilities.
+- Use **JIT mode** and **purge unused styles** for performance optimization.
+- Leverage **Tailwind’s dark mode** support with `dark:` classes.
+- Use **aria attributes and semantic HTML** for accessibility.
+- Prefer **CSS variables (`theme()`)** for better maintainability.
+- Minimize excessive class usage by combining styles efficiently.
+- Use **aspect ratio utilities** (`aspect-w-16 aspect-h-9`) for images and videos.

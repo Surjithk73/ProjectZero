@@ -1,0 +1,16 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+---
+name: zustand-best-practices.mdc
+description: Best practices for state management with Zustand
+globs: **/*.{ts,tsx}
+---
+
+- Use `immer` middleware for **immutable state updates**.
+- Implement **persisted state** for user sessions.
+- Utilize `devtools` middleware for **debugging**.
+- Keep stores **modular** to avoid large monolithic stores.
+- Use **selectors** to prevent unnecessary re-renders.
