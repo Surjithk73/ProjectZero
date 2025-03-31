@@ -9,7 +9,6 @@ export default function IdeatePage() {
   const [isRecording, setIsRecording] = useState(false);
   const [speechDetected, setSpeechDetected] = useState(false);
   const [isClient, setIsClient] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   
@@ -76,46 +75,22 @@ export default function IdeatePage() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Voice option */}
-          <div className="relative">
-            {/* Wavy glow effect when hovered */}
-            <div className={`absolute inset-0 transition-opacity duration-500 ${isHovering ? 'opacity-100' : 'opacity-0'}`}>
-              {isClient && [...Array(3)].map((_, i) => (
-                <div 
-                  key={i} 
-                  className="absolute inset-0 rounded-xl border border-yellow-400/20"
-                  style={{
-                    animation: `card-glow 3s infinite ease-in-out ${i * 0.5}s`,
-                    transform: `scale(${1 + (i * 0.03)})`,
-                  }}
-                ></div>
-              ))}
+          <button 
+            className="bg-[#111111] border border-[#222] rounded-xl p-8 flex flex-col items-center justify-center h-64 cursor-pointer hover:bg-[#161616] hover:border-yellow-400/30 hover:shadow-[0_0_20px_0px_rgba(234,179,8,0.15)] transition-all duration-200"
+            onClick={handleStartRecording}
+          >
+            <div className="bg-yellow-400/10 rounded-full p-4 mb-4 transition-transform">
+              <Mic className="h-8 w-8 text-yellow-400" />
             </div>
-            
-            <button 
-              className="relative z-10 bg-[#111111] border border-[#222] rounded-xl p-8 flex flex-col items-center justify-center h-64 w-full cursor-pointer hover:bg-[#161616] hover:border-yellow-400/30 hover:shadow-[0_0_20px_0px_rgba(234,179,8,0.15)] transition-all duration-200"
-              onClick={handleStartRecording}
-              onMouseEnter={() => setIsHovering(true)}
-              onMouseLeave={() => setIsHovering(false)}
-            >
-              <div className="relative">
-                {/* Mic icon glow */}
-                <div className={`absolute inset-0 rounded-full bg-yellow-400/10 ${isHovering ? 'animate-pulse' : ''}`} style={{ margin: '-0.5rem' }}></div>
-                
-                <div className="bg-yellow-400/10 rounded-full p-4 mb-4 transition-transform relative z-10">
-                  <Mic className="h-8 w-8 text-yellow-400" />
-                </div>
-              </div>
-              
-              <h2 className="text-xl font-medium text-white mb-2">Speak Your Idea</h2>
-              <p className="text-sm text-gray-400 text-center">
-                Talk through your concept naturally and our AI will process it
-              </p>
-            </button>
-          </div>
+            <h2 className="text-xl font-medium text-white mb-2">Speak Your Idea</h2>
+            <p className="text-sm text-gray-400 text-center">
+              Talk through your concept naturally and our AI will process it
+            </p>
+          </button>
           
           {/* Text option */}
           <button 
-            className="bg-[#111111] border border-[#222] rounded-xl p-8 flex flex-col items-center justify-center h-64 cursor-pointer hover:bg-[#161616] hover:border-yellow-400/30 hover:shadow-[0_0_20px_0px_rgba(234,179,8,0.15)] transition-all duration-200 hover-glow"
+            className="bg-[#111111] border border-[#222] rounded-xl p-8 flex flex-col items-center justify-center h-64 cursor-pointer hover:bg-[#161616] hover:border-yellow-400/30 hover:shadow-[0_0_20px_0px_rgba(234,179,8,0.15)] transition-all duration-200"
           >
             <div className="bg-yellow-400/10 rounded-full p-4 mb-4 transition-transform">
               <Keyboard className="h-8 w-8 text-yellow-400" />
@@ -172,24 +147,6 @@ export default function IdeatePage() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Add global styles for animations */}
-      <style jsx global>{`
-        @keyframes card-glow {
-          0% {
-            transform: scale(1);
-            opacity: 0.2;
-          }
-          50% {
-            transform: scale(1.03);
-            opacity: 0.4;
-          }
-          100% {
-            transform: scale(1.06);
-            opacity: 0;
-          }
-        }
-      `}</style>
     </div>
   );
 } 
