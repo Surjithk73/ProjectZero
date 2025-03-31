@@ -1,7 +1,7 @@
 "use client";
 
-import { Mic, Pause, Play, Send, StopCircle } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { Mic, Pause, Play, StopCircle } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
 interface AIVoiceInputProps {
@@ -39,6 +39,66 @@ export function AIVoiceInput({
     setIsClient(true);
   }, []);
 
+  const sendToElevenLabs = async (audioBlob: Blob) => {
+    try {
+      // Create form data to send the audio file
+      const formData = new FormData();
+      formData.append("file", audioBlob, "recording.mp3");
+      // Use correct model_id with underscore instead of hyphen
+      formData.append("model_id", "scribe_v1");
+      
+      console.log("Sending audio to ElevenLabs...");
+      
+      const response = await fetch("https://api.elevenlabs.io/v1/speech-to-text", {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "xi-api-key": "sk_7344cac779c6f60acd3359f707051a171a4ee8f9bbf2f23c"
+        },
+        body: formData
+      });
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("ElevenLabs API error response:", errorText);
+        throw new Error(`ElevenLabs API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log("ElevenLabs API response:", data);
+      setTranscript(data.text || "No transcription available");
+    } catch (error) {
+      console.error("Error sending audio to ElevenLabs:", error);
+      setTranscript("Error transcribing audio");
+    }
+  };
+
+  const stopRecording = useCallback(async () => {
+    if (!mediaRecorderRef.current) return;
+    
+    mediaRecorderRef.current.stop();
+    setIsProcessing(true);
+    
+    // Add a small delay to ensure we have all audio chunks
+    setTimeout(async () => {
+      // Use mp3 format which is better supported by the API
+      const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/mp3' });
+      await sendToElevenLabs(audioBlob);
+      
+      // Stop all audio tracks
+      if (mediaRecorderRef.current) {
+        const tracks = mediaRecorderRef.current.stream.getTracks();
+        tracks.forEach(track => track.stop());
+      }
+      
+      setSubmitted(false);
+      setPaused(false);
+      onStop?.(time, transcript);
+      setIsProcessing(false);
+    }, 500);
+  // Include all dependencies that are used inside the callback
+  }, [onStop, time, transcript]);
+
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
@@ -57,7 +117,7 @@ export function AIVoiceInput({
     }
 
     return () => clearInterval(intervalId);
-  }, [submitted, paused, isDemo, onStart]);
+  }, [submitted, paused, isDemo, onStart, stopRecording]);
 
   useEffect(() => {
     if (!isDemo) return;
@@ -117,65 +177,6 @@ export function AIVoiceInput({
     if (mediaRecorderRef.current && mediaRecorderRef.current.state === "paused") {
       mediaRecorderRef.current.resume();
       setPaused(false);
-    }
-  };
-
-  const stopRecording = async () => {
-    if (!mediaRecorderRef.current) return;
-    
-    mediaRecorderRef.current.stop();
-    setIsProcessing(true);
-    
-    // Add a small delay to ensure we have all audio chunks
-    setTimeout(async () => {
-      // Use mp3 format which is better supported by the API
-      const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/mp3' });
-      await sendToElevenLabs(audioBlob);
-      
-      // Stop all audio tracks
-      if (mediaRecorderRef.current) {
-        const tracks = mediaRecorderRef.current.stream.getTracks();
-        tracks.forEach(track => track.stop());
-      }
-      
-      setSubmitted(false);
-      setPaused(false);
-      onStop?.(time, transcript);
-      setIsProcessing(false);
-    }, 500);
-  };
-
-  const sendToElevenLabs = async (audioBlob: Blob) => {
-    try {
-      // Create form data to send the audio file
-      const formData = new FormData();
-      formData.append("file", audioBlob, "recording.mp3");
-      // Use correct model_id with underscore instead of hyphen
-      formData.append("model_id", "scribe_v1");
-      
-      console.log("Sending audio to ElevenLabs...");
-      
-      const response = await fetch("https://api.elevenlabs.io/v1/speech-to-text", {
-        method: "POST",
-        headers: {
-          "Accept": "application/json",
-          "xi-api-key": "sk_7344cac779c6f60acd3359f707051a171a4ee8f9bbf2f23c"
-        },
-        body: formData
-      });
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("ElevenLabs API error response:", errorText);
-        throw new Error(`ElevenLabs API error: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      console.log("ElevenLabs API response:", data);
-      setTranscript(data.text || "No transcription available");
-    } catch (error) {
-      console.error("Error sending audio to ElevenLabs:", error);
-      setTranscript("Error transcribing audio");
     }
   };
 

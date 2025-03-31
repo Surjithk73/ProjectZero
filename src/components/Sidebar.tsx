@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { 
   BarChart2,
   FolderIcon,
-  Layout,
   ChevronRight,
   ChevronLeft,
   Zap,

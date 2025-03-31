@@ -7,41 +7,9 @@ import { AIVoiceInput } from "@/components/ui/ai-voice-input";
 
 export default function IdeatePage() {
   const [isRecording, setIsRecording] = useState(false);
-  const [speechDetected, setSpeechDetected] = useState(false);
-  const [isClient, setIsClient] = useState(false);
-  const [recordingDuration, setRecordingDuration] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   
-  // Client-side only initialization
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-  
-  // Simulate speech detection with random intervals
-  useEffect(() => {
-    if (isRecording) {
-      const simulateSpeechDetection = () => {
-        setSpeechDetected(true);
-        
-        timerRef.current = setTimeout(() => {
-          setSpeechDetected(false);
-          
-          timerRef.current = setTimeout(() => {
-            if (isRecording) simulateSpeechDetection();
-          }, Math.random() * 1500 + 500); // Random pause between 0.5-2s
-        }, Math.random() * 2000 + 1000); // Random speech duration between 1-3s
-      };
-      
-      // Start the first simulation after a short delay
-      timerRef.current = setTimeout(simulateSpeechDetection, 800);
-    }
-    
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, [isRecording]);
+  // Client-side only initialization - removed unused state variables
   
   const handleStartRecording = () => {
     console.log("Starting recording mode"); // Debug log
@@ -51,18 +19,14 @@ export default function IdeatePage() {
   const handleStopRecording = () => {
     console.log("Stopping recording mode"); // Debug log
     setIsRecording(false);
-    setSpeechDetected(false);
   };
 
   const handleRecordingStart = () => {
     console.log("Recording started");
-    setSpeechDetected(true);
   };
 
   const handleRecordingStop = (duration: number) => {
     console.log(`Recording stopped after ${duration} seconds`);
-    setRecordingDuration(duration);
-    setSpeechDetected(false);
   };
 
   return (

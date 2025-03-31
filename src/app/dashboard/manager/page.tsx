@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { BookOpen, Download, Plus, FolderOpen } from "lucide-react";
+import { BookOpen, Plus, FolderOpen } from "lucide-react";
 import Link from "next/link";
 
 const IdeaManagerCard = ({ 

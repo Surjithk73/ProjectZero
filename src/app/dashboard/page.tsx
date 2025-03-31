@@ -2,7 +2,6 @@
 
 import React from "react";
 import { BookOpen, Download, Plus, ThumbsUp } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 // Card component for the ideas
