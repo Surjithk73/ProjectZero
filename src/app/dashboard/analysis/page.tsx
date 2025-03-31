@@ -1,15 +1,12 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { Mic, Keyboard, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { AIVoiceInput } from "@/components/ui/ai-voice-input";
 
 export default function IdeatePage() {
   const [isRecording, setIsRecording] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  
-  // Client-side only initialization - removed unused state variables
   
   const handleStartRecording = () => {
     console.log("Starting recording mode"); // Debug log
